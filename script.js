@@ -1,40 +1,28 @@
-/ Firebase Configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyAkmrohn4d2N8Fr6oWO7LAVAOGdRSzkqNk",
-    authDomain: "html-fast.firebaseapp.com",
-    databaseURL: "https://html-fast-default-rtdb.firebaseio.com",
-    projectId: "html-fast",
-    storageBucket: "html-fast.firebasestorage.app",
-    messagingSenderId: "131113718832",
-    appId: "1:131113718832:web:c8bee5b134623c85b249f5"
-};
+// EmailJS Initialization
+(function() {
+    emailjs.init("Dv2Q0J2QBQR2q01xX"); // Replace with your EmailJS public key
+})();
 
-// Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig);
-const database = firebase.database(app);
+document.getElementById("messageForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent the form from refreshing the page
 
-// Form Handling
-document.getElementById('dataForm').addEventListener('submit', (e) => {
-    e.preventDefault(); // Prevent form reload
-    
-    const textInput = document.getElementById('textInput').value;
-    const statusMessage = document.getElementById('statusMessage');
+    // Get the message from the textarea
+    const messageContent = document.getElementById("message").value;
 
-    // Save Data to Firebase
-    const ref = firebase.database().ref('submissions').push();
-    ref.set({
-        text: textInput,
-        timestamp: Date.now()
-    })
-    .then(() => {
-        // Show success message
-        statusMessage.textContent = 'Data submitted successfully!';
-        statusMessage.style.color = 'green';
-        document.getElementById('dataForm').reset();
-    })
-    .catch((error) => {
-        // Show error message
-        statusMessage.textContent = 'Error: ' + error.message;
-        statusMessage.style.color = 'red';
-    });
+    // Use EmailJS to send the email
+    emailjs
+        .send("service_kw7z5j8", "template_sv4wy09", {
+            message: messageContent,
+            to_email: "appsjk460@gmail.com", // Replace with your email
+        })
+        .then(
+            function(response) {
+                alert("Message sent successfully!");
+                console.log("Success:", response.status, response.text);
+            },
+            function(error) {
+                alert("Failed to send the message. Please try again.");
+                console.error("Error:", error);
+            }
+        );
 });
